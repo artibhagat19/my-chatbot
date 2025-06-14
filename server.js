@@ -1,26 +1,23 @@
 const express = require('express');
-const fs = require('fs');
 const path = require('path');
+const fs = require('fs');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Serve static files (HTML, JS, CSS)
+// Serve static files from 'public' folder
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.json());
 
-// Serve decision tree JSON
+// Serve bot logic JSON
 app.get('/bot-logic/decision-tree.json', (req, res) => {
   res.sendFile(path.join(__dirname, 'bot-logic', 'decision-tree.json'));
 });
 
-// Save chat history
-app.post('/save-chat', (req, res) => {
-  const chat = req.body;
-  fs.writeFileSync('chat-history.json', JSON.stringify(chat, null, 2));
-  res.json({ message: 'Chat saved' });
+// Chat history API (optional)
+app.get('/chat-history.json', (req, res) => {
+  res.sendFile(path.join(__dirname, 'chat-history.json'));
 });
 
-// Start server
 app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server is running on port ${PORT}`);
 });
